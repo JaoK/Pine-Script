@@ -1,0 +1,27 @@
+// USAGE:
+// Make a strategy.close call with condition stopLoss for every entryID that should apply a stop-loss
+
+// Example:
+// if barstate.isconfirmed and stopLoss
+//     strategy.close(comment = 'Stop-loss Long', id = 'EnterLong', when = close <= longStopLoss)
+// if barstate.isconfirmed and stopLoss
+//     strategy.close(comment = 'Stop-loss Short', id = 'EnterShort', when = close >= shortStopLoss)
+
+
+// --- Stop Loss --- 
+
+var stopLoss = input(true, title='Enable Stop Loss')
+
+var longLossPerc = input.float(title = 'Long Stop Loss (%)', minval = 0.0, step = 1.0, defval = 5.0) * 0.01
+var shortLossPerc = input.float(title = 'Short Stop Loss (%)', minval = 0.0, step = 1.0, defval = 5.0) * 0.01 
+
+var longStopLoss = 0.0 // min
+var shortStopLoss = strategy.position_avg_price // max
+
+if stopLoss 
+
+    shortStopLoss := strategy.position_avg_price * (1 + shortLossPerc)
+    longStopLoss := strategy.position_avg_price * (1 - longLossPerc) 
+  
+// DEBUG/VISUAL:
+// plot(stopLoss ? (strategy.position_size > 0 ? longStopLoss : shortStopLoss) : na, title = "Stop Loss", color = strategy.position_size > 0 ? color.green : color.purple, style = plot.style_cross, linewidth = 2)

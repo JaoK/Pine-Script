@@ -1,0 +1,7 @@
+// USAGE: 
+// Always use the condition (not onlyLong) for every short entry
+
+
+// --- Only Long ---
+
+var onlyLong = input(true, title='Take Only Long Trades')

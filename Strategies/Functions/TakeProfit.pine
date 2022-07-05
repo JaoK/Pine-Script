@@ -1,0 +1,23 @@
+// USAGE:
+// Make a strategy.close call with condition takeProfit for every entryID that should apply a take profit stop-loss
+
+// Example:
+// if barstate.isconfirmed and takeProfit
+//     strategy.close(comment = 'Take Profit Long', id = 'EnterLong', when = close >= longTakeProfit)
+// if barstate.isconfirmed and takeProfit
+//     strategy.close(comment = 'Take Profit Short', id = 'EnterShort', when = close <= shortTakeProfit)
+
+
+// --- Take Proft --- 
+
+var takeProfit = input(true, title = 'Enable Take Profit')
+
+var longProfitPerc = input.float(title = 'Long Take Profit (%)', minval = 0.0, step = 5.0, defval = 25) * 0.01
+var shortProfitPerc = input.float(title = 'Short Take Profit (%)', minval = 0.0, step = 5.0, defval = 25) * 0.01
+
+var longTakeProfit = strategy.position_avg_price * (1 + longProfitPerc)
+var shortTakeProfit= strategy.position_avg_price * (1 - shortProfitPerc) 
+
+// DEBUG/VISUAL:
+// plot(takeProfit ? (strategy.position_size > 0 ? longTakeProfit : shortTakeProfit) : na, color = strategy.position_size > 0 ? color.blue : color.red, style = plot.style_cross, linewidth = 2)
+
